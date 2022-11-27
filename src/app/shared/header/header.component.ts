@@ -4,12 +4,25 @@ import { UserService } from '../../services/user.service';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styles: [],
+  styles: [
+    `
+      @media (min-width: 768px) {
+        .ellipsis {
+          width: 150px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+    `,
+  ],
 })
 export class HeaderComponent {
-  constructor(private userServoce: UserService) {}
+  user = this.userService.user;
+
+  constructor(private userService: UserService) {}
 
   logout() {
-    this.userServoce.logout();
+    this.userService.logout();
   }
 }
