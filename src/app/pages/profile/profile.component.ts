@@ -20,7 +20,7 @@ import { UserService } from '../../services/user.service';
 export class ProfileComponent {
   profileForm: FormGroup;
   user: User;
-  imgToUpload?: File;
+  imgTemp?: File;
   imgSrc?: string | ArrayBuffer | null;
 
   constructor(
@@ -40,7 +40,7 @@ export class ProfileComponent {
 
   updateProfile() {
     console.log(this.profileForm.value);
-    this.userService.updateUser(this.profileForm.value).subscribe({
+    this.userService.updateProfile(this.profileForm.value).subscribe({
       next: ({ user }) => {
         this.user.name = user.name;
         this.user.email = user.email;
@@ -54,7 +54,7 @@ export class ProfileComponent {
   }
 
   changeImage(file: File) {
-    this.imgToUpload = file;
+    this.imgTemp = file;
 
     if (!file) {
       return;
@@ -65,16 +65,16 @@ export class ProfileComponent {
       this.imgSrc = fileReader.result;
     };
 
-    fileReader.readAsDataURL(this.imgToUpload as File);
+    fileReader.readAsDataURL(this.imgTemp as File);
   }
 
   uploadImage() {
     this.fileUploadService
-      .updateImage(this.imgToUpload as File, 'users', this.user.uid as string)
+      .updateImage(this.imgTemp as File, 'users', this.user.uid as string)
       .then(
         (imageName) => (
           (this.user.img = imageName),
-          (this.imgToUpload = undefined),
+          (this.imgTemp = undefined),
           (this.imgSrc = undefined),
           Swal.fire('Saved', 'User image updated', 'success')
         )

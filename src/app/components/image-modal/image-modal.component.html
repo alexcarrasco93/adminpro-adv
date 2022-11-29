@@ -1,0 +1,34 @@
+<div class="modal-background-image animated fadeIn fast" [class.hidden]="imageModalService.hideModal">
+  <div id="responsive-modal" class="modal fade show" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    style="display: block;">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Upload Image</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <h3>Select one image</h3>
+          <div class="img-container text-center" *ngIf="user">
+            <ng-container *ngIf="!imgTemp; else imgTempRef">
+              <img *ngIf="user.isGoogleImage" [src]="user.imageUrl" alt="user image" referrerpolicy="no-referrer"
+                style="width: 200px; height: 200px;" />
+              <img *ngIf="!user.isGoogleImage" [src]="user.imageUrl | secure | async" alt="user image"
+                style="width: 200px; height: 200px;" />
+            </ng-container>
+            <ng-template #imgTempRef>
+              <img [src]="imgSrc" alt="user image" style="width: 200px; height: 200px;" />
+            </ng-template>
+          </div>
+
+          <input type="file" name="" id="" (change)="changeImage($event.target?.['files'][0])" value="Hola">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default waves-effect" data-dismiss="modal"
+            (click)="closeModal()">Cancel</button>
+          <button type="button" class="btn btn-danger waves-effect waves-light" (click)="uploadImage()">Upload image</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

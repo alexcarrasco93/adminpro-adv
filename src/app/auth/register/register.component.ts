@@ -46,7 +46,7 @@ export class RegisterComponent {
   createUser() {
     this.formSubmitted = true;
 
-    if (this.registerForm.invalid) {
+    if (this.registerForm.invalid || !this.registerForm.get('terms')?.value) {
       return;
     }
 

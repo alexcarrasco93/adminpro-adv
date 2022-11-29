@@ -37,20 +37,20 @@
         <h4 class="card-title">Avatar</h4>
         <h6 class="card-subtitle">User image</h6>
         <div class="img-container text-center">
-          <ng-container *ngIf="!imgToUpload; else imgToUploadRef">
+          <ng-container *ngIf="!imgTemp; else imgTempRef">
             <img *ngIf="user.isGoogleImage" [src]="user.imageUrl" alt="user image" referrerpolicy="no-referrer"
               style="width: 200px; height: 200px;" />
             <img *ngIf="!user.isGoogleImage" [src]="user.imageUrl | secure | async" alt="user image"
               style="width: 200px; height: 200px;" />
           </ng-container>
-          <ng-template #imgToUploadRef>
+          <ng-template #imgTempRef>
             <img [src]="imgSrc" alt="user image" style="width: 200px; height: 200px;" />
           </ng-template>
         </div>
         <input type="file" name="" id="" (change)="changeImage($event.target?.['files'][0])" value="Hola">
         <br><br>
         <button type="button" class="btn btn-success btn-block waves-effect waves-light m-r-10"
-          [disabled]="!imgToUpload" (click)="uploadImage()">
+          [disabled]="!imgTemp" (click)="uploadImage()">
           <i class="fa fa-save"></i>
           Change image
         </button>

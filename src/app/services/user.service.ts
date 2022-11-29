@@ -79,7 +79,7 @@ export class UserService {
       .pipe(tap(this.storeToken));
   }
 
-  updateUser(data: { email: string; name: string }) {
+  updateProfile(data: { email: string; name: string; role: string }) {
     return this.http.put<{ user: User }>(`${base_url}/users/${this.user.uid}`, {
       ...data,
       role: this.user.role,
@@ -96,5 +96,38 @@ export class UserService {
     return this.http
       .post<{ token: string }>(`${base_url}/login/google`, { token })
       .pipe(tap(this.storeToken));
+  }
+
+  getUsers(from = 0) {
+    const url = `${base_url}/users?from=${from}`;
+    return this.http.get<{ users: User[]; total: number }>(url).pipe(
+      map((res) => {
+        const users = res.users.map(
+          (user) =>
+            new User(
+              user.name,
+              user.email,
+              user.role,
+              user.img,
+              user.password,
+              user.google,
+              user.uid
+            )
+        );
+        return {
+          users,
+          total: res.total,
+        };
+      })
+    );
+  }
+
+  deleteUser(uid: string) {
+    const url = `${base_url}/users/${uid}`;
+    return this.http.delete(url);
+  }
+
+  updateUser(user: User) {
+    return this.http.put<{ user: User }>(`${base_url}/users/${user.uid}`, user);
   }
 }
