@@ -9,8 +9,10 @@ const base_url = environment.base_url;
 })
 export class ImageModalService {
   private _hideModal = true;
-  type?: 'users' | 'doctors' | 'hospitals';
-  user?: User;
+  type!: 'users' | 'doctors' | 'hospitals';
+  id?: string;
+  img?: string;
+  isGoogleImage = false;
   newImage = new EventEmitter<string>();
 
   get hideModal() {
@@ -19,11 +21,26 @@ export class ImageModalService {
 
   constructor() {}
 
-  openModal(type: 'users' | 'doctors' | 'hospitals', user: User) {
+  openModal(
+    type: 'users' | 'doctors' | 'hospitals',
+    id: string,
+    img: string,
+    isGoogleImage = false
+  ) {
     this._hideModal = false;
     this.type = type;
-    this.user = user;
-    console.log(this.user);
+    this.id = id;
+    this.isGoogleImage = isGoogleImage;
+
+    if (img?.includes('https')) {
+      this.img = img;
+    } else {
+      if (img) {
+        this.img = `${base_url}/upload/${type}/${img}`;
+      } else {
+        this.img = `${base_url}/upload/${type}/no-image`;
+      }
+    }
   }
 
   closeModal() {

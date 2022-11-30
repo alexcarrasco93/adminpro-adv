@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { Doctor } from '../models/doctor.model';
+import { Hospital } from '../models/hospital.model';
 import { User } from '../models/user.model';
 
 const base_url = environment.base_url;
@@ -19,7 +21,10 @@ export class SearchesService {
         switch (type) {
           case 'users':
             return this.tranformUsers(results);
-
+          case 'hospitals':
+            return results as Hospital[];
+          case 'doctors':
+            return results as Doctor[];
           default:
             return [];
         }

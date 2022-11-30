@@ -13,8 +13,13 @@ export class ImageModalComponent {
   imgTemp?: File;
   imgSrc?: string | ArrayBuffer | null;
 
-  get user() {
-    return this.imageModalService.user;
+  get data() {
+    return {
+      id: this.imageModalService.id,
+      type: this.imageModalService.type,
+      img: this.imageModalService.img,
+      isGoogleImage: this.imageModalService.isGoogleImage,
+    };
   }
 
   constructor(
@@ -45,10 +50,10 @@ export class ImageModalComponent {
 
   uploadImage() {
     this.fileUploadService
-      .updateImage(this.imgTemp as File, 'users', this.user?.uid as string)
+      .updateImage(this.imgTemp as File, this.data.type, this.data.id as string)
       .then(
         (imageName: string) => (
-          Swal.fire('Saved', 'User image updated', 'success'),
+          Swal.fire('Saved', 'Image updated', 'success'),
           this.closeModal(),
           this.imageModalService.newImage.emit(imageName)
         )

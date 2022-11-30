@@ -64,7 +64,7 @@ export class UsersComponent implements OnInit, OnDestroy {
     }
     this.searchesService
       .search('users', term)
-      .subscribe((res) => (this.users = res));
+      .subscribe((res) => (this.users = res as User[]));
   }
 
   deleteUser(uid: string) {
@@ -105,6 +105,11 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
   openModal(user: User) {
-    this.imageModalService.openModal('users', user);
+    this.imageModalService.openModal(
+      'users',
+      user.uid!,
+      user.img!,
+      user.isGoogleImage
+    );
   }
 }

@@ -2,12 +2,13 @@
   <div class="col-12">
     <div class="card">
       <div class="card-body">
-        <input type="text" class="form-control" placeholder="Search doctors...">
+        <input type="text" class="form-control" placeholder="Search doctors..." (keyup)="search(searchInpRef.value)"
+          #searchInpRef>
       </div>
     </div>
   </div>
 </div>
-<div class="row animated fadeIn fast">
+<div class="row animated fadeIn fast" *ngIf="loading">
   <div class="col-12">
     <div class="text-center alert alert-info">
       <h4 class="alert-heading">Loading</h4>
@@ -17,44 +18,55 @@
   </div>
 </div>
 
-<div class="row">
+<div class="row" *ngIf="!loading">
   <div class="col-12">
     <div class="card">
       <div class="card-body">
-        <h4 class="card-title">Users</h4>
-        <h6 class="card-subtitle">Registered users in my application</h6>
+        <div class="row">
+          <div class="col-8">
+            <h4 class="card-title">Doctors</h4>
+            <h6 class="card-subtitle">Registered doctors in my application</h6>
+          </div>
+          <div class="col">
+            <div class="text-right">
+              <a class="btn btn-primary" routerLink="/dashboard/doctor/new">
+                <i class="fa fa-user-md"></i>
+                Create Doctor
+              </a>
+            </div>
+          </div>
+        </div>
         <div class="table-responsive">
           <table class="table table-bordered">
             <thead>
               <tr>
-                <th>Avatar</th>
-                <th>Email</th>
+                <th class="w100">Photo</th>
                 <th>Name</th>
-                <th>Role</th>
-                <th>Auth</th>
-                <th class="text-nowrap">Actions</th>
+                <th class="text-nowrap w100">Actions</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Tantas earum numeris</td>
-                <td>Tantas earum numeris</td>
-                <td>Tantas earum numeris</td>
-                <td>Tantas earum numeris</td>
-                <td>Tantas earum numeris</td>
-                <td class="text-nowrap">
-                  <a href="#" data-toggle="tooltip" data-original-title="Edit"> <i
-                      class="fa fa-pencil text-inverse m-r-10"></i> </a>
-                  <a href="#" data-toggle="tooltip" data-original-title="Delete"> <i
-                      class="fa fa-close text-danger"></i> </a>
+              <tr *ngFor="let doctor of doctors">
+                <td class="text-center">
+                  <img [src]="doctor.img! | imageUrl: 'doctors' | secure | async" [alt]="doctor.name"
+                    class="cursor w100" (click)="openModal(doctor)">
+                </td>
+                <td>
+                  <p>{{doctor.name}}</p>
+                </td>
+                <td class="text-nowrap text-center">
+                  <a [routerLink]="['/dashboard/doctor', doctor._id]" data-toggle="tooltip" data-original-title="Edit"
+                    class="cursor">
+                    <i class="fa fa-pencil text-inverse m-r-10"></i>
+                  </a>
+                  <a (click)="deleteDoctor(doctor)" data-toggle="tooltip" data-original-title="Delete" class="cursor">
+                    <i class="fa fa-close text-danger"></i>
+                  </a>
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
-        <button class="btn btn-secondary">Previous</button>
-        &nbsp;
-        <button class="btn btn-secondary">Next</button>
       </div>
     </div>
   </div>

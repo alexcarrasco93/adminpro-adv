@@ -2,12 +2,13 @@
   <div class="col-12">
     <div class="card">
       <div class="card-body">
-        <input type="text" class="form-control" placeholder="Search hospitals...">
+        <input type="text" class="form-control" placeholder="Search hospitals..." (keyup)="search(searchInpRef.value)"
+          #searchInpRef>
       </div>
     </div>
   </div>
 </div>
-<div class="row animated fadeIn fast">
+<div class="row animated fadeIn fast" *ngIf="loading">
   <div class="col-12">
     <div class="text-center alert alert-info">
       <h4 class="alert-heading">Loading</h4>
@@ -17,44 +18,56 @@
   </div>
 </div>
 
-<div class="row">
+<div class="row" *ngIf="!loading">
   <div class="col-12">
     <div class="card">
       <div class="card-body">
-        <h4 class="card-title">Users</h4>
-        <h6 class="card-subtitle">Registered users in my application</h6>
+        <div class="row">
+          <div class="col-8">
+            <h4 class="card-title">Hospitals ({{hospitals.length}})</h4>
+            <h6 class="card-subtitle">Registered hospitals in my application</h6>
+          </div>
+          <div class="col">
+            <div class="text-right">
+              <button class="btn btn-primary" (click)="openSweetAlert()">
+                <i class="fa fa-hospital-o"></i>
+                Create Hospital
+              </button>
+            </div>
+          </div>
+        </div>
         <div class="table-responsive">
           <table class="table table-bordered">
             <thead>
               <tr>
-                <th>Avatar</th>
-                <th>Email</th>
+                <th class="w100">Photo</th>
                 <th>Name</th>
-                <th>Role</th>
-                <th>Auth</th>
-                <th class="text-nowrap">Actions</th>
+                <th class="text-nowrap w100">Actions</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Tantas earum numeris</td>
-                <td>Tantas earum numeris</td>
-                <td>Tantas earum numeris</td>
-                <td>Tantas earum numeris</td>
-                <td>Tantas earum numeris</td>
-                <td class="text-nowrap">
-                  <a href="#" data-toggle="tooltip" data-original-title="Edit"> <i
-                      class="fa fa-pencil text-inverse m-r-10"></i> </a>
-                  <a href="#" data-toggle="tooltip" data-original-title="Delete"> <i
-                      class="fa fa-close text-danger"></i> </a>
+              <tr *ngFor="let hospital of hospitals">
+                <td class="text-center">
+                  <img [src]="hospital.img! | imageUrl: 'hospitals' | secure | async" [alt]="hospital.name"
+                    class="cursor w100" (click)="openModal(hospital)">
+                </td>
+                <td>
+                  <input type="text" class="form-control" placeholder="Hospital name" [(ngModel)]="hospital.name">
+                </td>
+                <td class="text-nowra text-center">
+                  <a (click)="saveChanges(hospital)" data-toggle="tooltip" data-original-title="Save changes"
+                    class="cursor">
+                    <i class="fa fa-pencil text-inverse m-r-10"></i>
+                  </a>
+                  <a (click)="deleteHospital(hospital)" data-toggle="tooltip" data-original-title="Delete"
+                    class="cursor">
+                    <i class="fa fa-close text-danger"></i>
+                  </a>
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
-        <button class="btn btn-secondary">Previous</button>
-        &nbsp;
-        <button class="btn btn-secondary">Next</button>
       </div>
     </div>
   </div>
