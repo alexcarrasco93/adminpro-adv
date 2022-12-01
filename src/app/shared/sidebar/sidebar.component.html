@@ -26,7 +26,7 @@
         <li class="nav-devider"></li>
         <li class="nav-small-cap">PERSONAL</li>
 
-        <li *ngFor="let menuItem of meunItems">
+        <li *ngFor="let menuItem of sidebarService.menu">
           <a class="has-arrow waves-effect fast waves-dark" href="#" aria-expanded="false">
             <i [ngClass]="menuItem.icon"></i>
             <span class="hide-menu">{{menuItem.title}} <span

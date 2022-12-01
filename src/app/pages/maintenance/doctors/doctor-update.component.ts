@@ -8,7 +8,6 @@ import {
   of,
   switchMap,
   tap,
-  throwError,
 } from 'rxjs';
 import Swal from 'sweetalert2';
 import { Doctor } from '../../../models/doctor.model';

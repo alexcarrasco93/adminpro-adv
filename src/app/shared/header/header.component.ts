@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
 
 @Component({
@@ -20,9 +21,15 @@ import { UserService } from '../../services/user.service';
 export class HeaderComponent {
   user = this.userService.user;
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService, private router: Router) {}
 
   logout() {
     this.userService.logout();
+  }
+
+  search(term: string) {
+    if (term) {
+      this.router.navigateByUrl(`/dashboard/search/${term}`);
+    }
   }
 }

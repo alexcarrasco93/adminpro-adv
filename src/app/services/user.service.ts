@@ -12,14 +12,21 @@ declare const google: any;
 
 const base_url = environment.base_url;
 
+interface StoreTokenAndMenu {
+  token: string;
+  menu: any;
+  user?: User;
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
   user!: User;
 
-  private storeToken = ({ token }: { token: string; user?: User }) => {
+  private storeToken = ({ token, menu }: StoreTokenAndMenu) => {
     localStorage.setItem('token', token);
+    localStorage.setItem('menu', JSON.stringify(menu));
   };
 
   constructor(
@@ -48,6 +55,7 @@ export class UserService {
 
   logout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('menu');
     if (this.user.google) {
       google.accounts.id.revoke(this.user.email, () => {
         this.router.navigateByUrl('/login');
@@ -61,7 +69,7 @@ export class UserService {
     const token = localStorage.getItem('token') || '';
 
     return this.http
-      .get<{ token: string; user: User }>(`${base_url}/login/renew`)
+      .get<{ token: string; menu: any; user: User }>(`${base_url}/login/renew`)
       .pipe(
         tap(this.storeToken),
         tap(({ user }) => {
@@ -75,7 +83,7 @@ export class UserService {
 
   createUser(formData: RegisterForm) {
     return this.http
-      .post<{ token: string }>(`${base_url}/users`, formData)
+      .post<{ token: string; menu: any }>(`${base_url}/users`, formData)
       .pipe(tap(this.storeToken));
   }
 
@@ -88,13 +96,13 @@ export class UserService {
 
   login(formData: LoginForm) {
     return this.http
-      .post<{ token: string }>(`${base_url}/login`, formData)
+      .post<{ token: string; menu: any }>(`${base_url}/login`, formData)
       .pipe(tap(this.storeToken));
   }
 
   loginGoogle(token: string) {
     return this.http
-      .post<{ token: string }>(`${base_url}/login/google`, { token })
+      .post<{ token: string; menu: any }>(`${base_url}/login/google`, { token })
       .pipe(tap(this.storeToken));
   }
 

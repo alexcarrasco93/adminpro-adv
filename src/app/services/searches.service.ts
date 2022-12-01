@@ -14,6 +14,21 @@ const base_url = environment.base_url;
 export class SearchesService {
   constructor(private http: HttpClient) {}
 
+  globalSearch(term: string) {
+    const url = `${base_url}/all/${term}`;
+    return this.http
+      .get<{
+        users: User[];
+        hospitals: Hospital[];
+        doctors: Doctor[];
+      }>(url)
+      .pipe(
+        map(({ hospitals, users, doctors }) => {
+          return { hospitals, users: this.tranformUsers(users), doctors };
+        })
+      );
+  }
+
   search(type: 'users' | 'doctors' | 'hospitals', term: string) {
     const url = `${base_url}/all/collection/${type}/${term}`;
     return this.http.get<{ results: any[] }>(url).pipe(
