@@ -51,15 +51,15 @@ export class ImageModalComponent {
   uploadImage() {
     this.fileUploadService
       .updateImage(this.imgTemp as File, this.data.type, this.data.id as string)
-      .then(
-        (imageName: string) => (
+      .subscribe({
+        next: (imageName) => {
           Swal.fire('Saved', 'Image updated', 'success'),
-          this.closeModal(),
-          this.imageModalService.newImage.emit(imageName)
-        )
-      )
-      .catch((err) =>
-        Swal.fire('Error', "The image couldn't be upload", 'error')
-      );
+            this.closeModal(),
+            this.imageModalService.newImage.emit(imageName);
+        },
+        error() {
+          Swal.fire('Error', "The image couldn't be upload", 'error');
+        },
+      });
   }
 }

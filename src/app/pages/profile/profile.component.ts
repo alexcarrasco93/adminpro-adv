@@ -71,16 +71,16 @@ export class ProfileComponent {
   uploadImage() {
     this.fileUploadService
       .updateImage(this.imgTemp as File, 'users', this.user.uid as string)
-      .then(
-        (imageName) => (
-          (this.user.img = imageName),
-          (this.imgTemp = undefined),
-          (this.imgSrc = undefined),
-          Swal.fire('Saved', 'User image updated', 'success')
-        )
-      )
-      .catch((err) =>
-        Swal.fire('Error', "The image couldn't be upload", 'error')
-      );
+      .subscribe({
+        next: (imageName) => {
+          this.user.img = imageName as any;
+          this.imgTemp = undefined;
+          this.imgSrc = undefined;
+          Swal.fire('Saved', 'User image updated', 'success');
+        },
+        error() {
+          Swal.fire('Error', "The image couldn't be upload", 'error');
+        },
+      });
   }
 }
